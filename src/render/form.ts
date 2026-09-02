@@ -14,7 +14,7 @@ const options = (values: readonly string[], selected: string): string =>
 
 export function formEl(onAdd: (payload: AddPayload) => AddResponse): HTMLFormElement {
   const form = document.createElement("form");
-  form.id = "add-form";
+  form.id = "prompt-form";
   form.noValidate = true; // JS is the real gate; maxlength attr is the first fence
   form.innerHTML = `
     <h2 class="form-title">Add a prompt</h2>
@@ -31,24 +31,27 @@ export function formEl(onAdd: (payload: AddPayload) => AddResponse): HTMLFormEle
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    const text = (form.querySelector("#prompt-text") as HTMLInputElement).value;
+    const input = form.querySelector("#prompt-text") as HTMLInputElement;
+    const text = input.value;
     const difficulty = (form.querySelector("#prompt-difficulty") as HTMLSelectElement).value as Difficulty;
     const style = (form.querySelector("#prompt-style") as HTMLSelectElement).value as Style;
     const msg = form.querySelector("#form-msg") as HTMLParagraphElement;
     const res = onAdd({ text, difficulty, style });
     if (!res.ok) {
       // Input deliberately not cleared — the user's text survives the error.
+      input.setAttribute("aria-invalid", "true");
       msg.textContent = res.error;
       msg.hidden = false;
       return;
     }
+    input.removeAttribute("aria-invalid");
     msg.hidden = true;
     if (res.warn) {
       msg.textContent = res.warn;
       msg.hidden = false;
     }
     form.reset();
-    (form.querySelector("#prompt-text") as HTMLInputElement).focus();
+    input.focus();
   });
   return form;
 }

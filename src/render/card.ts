@@ -25,7 +25,7 @@ export function cardEl(p: Prompt, actions: { onCycle: (id: string) => void; onDe
   el.style.setProperty("--jitter", jitterDeg(p.id));
   el.tabIndex = 0;
   el.setAttribute("role", "button");
-  el.setAttribute("aria-label", `${p.text}. Status: ${STATUS_LABEL[p.status]}. Press Enter to cycle status.`);
+  el.setAttribute("aria-label", `${p.text}. Status: ${STATUS_LABEL[p.status]}. Press Enter or Space to cycle status.`);
   el.innerHTML = `
     <div class="card-tags">
       <span class="tag tag-style">${STYLE_ICON[p.style]}<span>${p.style}</span></span>
