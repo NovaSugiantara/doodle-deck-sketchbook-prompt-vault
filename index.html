@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <title>Doodle Deck — sketchbook prompt vault</title>
+ <meta name="description" content="A personal deck of drawing prompts for hobbyist artists.">
+ <script src="https://cdn.tailwindcss.com"></script>
+ <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+ <a class="skip-link" href="#grid">Skip to prompts</a>
+ <header class="app-header">
+  <div class="header-row">
+   <h1 class="app-title">Doodle Deck</h1>
+   <p id="counts" role="status" aria-live="polite" class="counts">0 prompts · 0 untried</p>
+  </div>
+  <div class="surprise-zone">
+   <button type="button" id="surprise-btn" class="btn btn-primary btn-big">Surprise me</button>
+   <p id="surprise-caption" class="surprise-caption" hidden></p>
+  </div>
+ </header>
+ <main class="app-main">
+  <div id="banner" role="alert" class="banner" hidden></div>
+  <section id="spotlight" class="spotlight" hidden aria-label="Surprise pick"></section>
+  <div id="filters"></div>
+  <div class="form-drawer">
+   <button type="button" id="toggle-form" class="btn btn-ghost" aria-expanded="false" aria-controls="add-form">+ Add a prompt</button>
+   <div id="add-form" hidden></div>
+  </div>
+  <section id="grid" class="grid" aria-label="Prompt cards"></section>
+ </main>
+ <div id="toast" class="toast" role="status" hidden>
+  <span id="toast-msg"></span>
+  <button type="button" id="toast-undo" class="btn btn-ghost">Undo</button>
+ </div>
+ <script type="module" src="dist/main.js"></script>
+</body>
+</html>
