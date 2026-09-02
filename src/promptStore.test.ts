@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { addPrompt, cycleStatus, deckCounts, deletePrompt, escapeHtml, filterPrompts, MAX_TEXT, nextStatus, pickSurprise, restorePrompt, SOFT_CAP, untriedPool } from "./promptStore.js";
-import type { Prompt } from "./types.js";
+import type { Difficulty, Prompt } from "./types.js";
 
 const p = (id: string, over: Partial<Prompt> = {}): Prompt =>
   ({ id, text: `prompt ${id}`, difficulty: "easy", style: "pencil", status: "untried", createdAt: 0, ...over });
@@ -15,6 +15,11 @@ test("add: rejects text over 140 chars", () => {
   const res = addPrompt([], "x".repeat(MAX_TEXT + 1), "easy", "pencil");
   assert.equal(res.ok, false);
   if (!res.ok) assert.match(res.error, /140/);
+});
+
+test("add: rejects runtime-invalid select values", () => {
+  const res = addPrompt([], "valid text", "bogus" as Difficulty, "pencil");
+  assert.equal(res.ok, false);
 });
 
 test("add: trims text, defaults status untried", () => {

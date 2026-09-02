@@ -1,7 +1,7 @@
 import type { Difficulty, Prompt, Status, Style } from "./types.js";
+import { DIFFICULTIES, STYLES } from "./types.js";
 
 export const MAX_TEXT = 140;
-// PRD: soft cap 200 with a warning, never a hard block.
 export const SOFT_CAP = 200;
 
 const ESC: Record<string, string> = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
@@ -15,6 +15,7 @@ export function addPrompt(prompts: Prompt[], text: string, difficulty: Difficult
   const trimmed = text.trim();
   if (trimmed === "") return { ok: false, error: "Write something first — even three words counts." };
   if (trimmed.length > MAX_TEXT) return { ok: false, error: `Too long: ${trimmed.length} of ${MAX_TEXT} characters.` };
+  if (!DIFFICULTIES.includes(difficulty) || !STYLES.includes(style)) return { ok: false, error: "Choose a valid difficulty and style." };
   const prompt: Prompt = { id, text: trimmed, difficulty, style, status: "untried", createdAt: now };
   const next = [...prompts, prompt];
   return { ok: true, prompts: next, prompt, warn: next.length > SOFT_CAP ? `${next.length} prompts is a lot — some old ones may deserve a clear-out.` : null };
@@ -26,7 +27,6 @@ export function deletePrompt(prompts: Prompt[], id: string): { prompts: Prompt[]
   return { prompts: [...prompts.slice(0, index), ...prompts.slice(index + 1)], removed: prompts[index] ?? null, index };
 }
 
-/** Undo support: put a removed prompt back where it was. */
 export function restorePrompt(prompts: Prompt[], prompt: Prompt, index: number): Prompt[] {
   const next = [...prompts];
   next.splice(Math.max(0, Math.min(index, next.length)), 0, prompt);
@@ -41,8 +41,6 @@ export const cycleStatus = (prompts: Prompt[], id: string): Prompt[] =>
 export const filterPrompts = (prompts: Prompt[], difficulty: Difficulty | "all", style: Style | "all"): Prompt[] =>
   prompts.filter((p) => (difficulty === "all" || p.difficulty === difficulty) && (style === "all" || p.style === style));
 
-// FR-4: Surprise Me ignores filters — draws from the full untried pool so a
-// stale filter can't fake an empty deck.
 export const untriedPool = (prompts: Prompt[]): Prompt[] => prompts.filter((p) => p.status === "untried");
 
 export function pickSurprise(prompts: Prompt[]): Prompt | null {

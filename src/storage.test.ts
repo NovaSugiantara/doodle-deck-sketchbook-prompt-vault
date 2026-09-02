@@ -34,6 +34,7 @@ test("malformed rows dropped, valid rows kept", () => {
   const res = loadDeck(fakeStore({ [STORAGE_KEY]: JSON.stringify([SAMPLE[0], { x: 1 }, null]) }));
   assert.equal(res.prompts.length, 1);
   assert.equal(res.prompts[0]?.id, "a1");
+  assert.notEqual(res.error, null);
 });
 
 test("setItem throwing (quota) → saveDeck false, no throw", () => {
@@ -58,6 +59,8 @@ test("normalizePrompt guards", () => {
   assert.equal(normalizePrompt("nope"), null);
   assert.equal(normalizePrompt({ ...SAMPLE[0], text: "  " }), null);
   assert.equal(normalizePrompt({ ...SAMPLE[0], difficulty: "impossible" }), null);
+  assert.equal(normalizePrompt({ ...SAMPLE[0], text: "x".repeat(141) }), null);
+  assert.equal(normalizePrompt({ ...SAMPLE[0], text: "  trimmed  " })?.text, "trimmed");
   assert.equal(normalizePrompt({ ...SAMPLE[0], createdAt: "junk" })?.createdAt, 0);
 });
 
