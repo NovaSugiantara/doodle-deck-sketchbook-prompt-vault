@@ -8,7 +8,6 @@ export const SAMPLE_PROMPTS: string[] = [
 
 const DOODLE_SVG = `<svg class="empty-doodle" viewBox="0 0 120 80" aria-hidden="true"><path d="M8 60 Q 30 20 55 45 T 112 38" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 3"/><path d="M14 68 Q 40 52 70 62 T 110 58" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`;
 
-/** Zero data: first-run onboarding with CTA + clickable sample prompts. */
 export function zeroDataEl(openForm: (sample: string) => void): HTMLElement {
   const el = document.createElement("section");
   el.className = "empty zero-empty";
@@ -28,7 +27,6 @@ export function zeroDataEl(openForm: (sample: string) => void): HTMLElement {
   return el;
 }
 
-/** Filtered empty: lighter than zero-data, always offers the way out. */
 export function filteredEmptyEl(onClear: () => void): HTMLElement {
   const el = document.createElement("section");
   el.className = "empty filtered-empty";
@@ -38,7 +36,6 @@ export function filteredEmptyEl(onClear: () => void): HTMLElement {
   return el;
 }
 
-/** Loading skeleton: paper-shimmer cards, not a spinner. */
 export function skeletonGrid(count = 3): HTMLElement {
   const el = document.createElement("div");
   el.className = "grid";

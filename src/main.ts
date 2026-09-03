@@ -26,8 +26,6 @@ const $ = (id: string): HTMLElement => {
 const showError = (msg: string): void => { $("banner").textContent = msg; $("banner").hidden = false; };
 const clearError = (): void => { $("banner").hidden = true; };
 
-// In-memory state moves only when storage accepted the write — a failed save
-// can never leave UI and storage disagreeing, and form input stays intact.
 function commit(next: Prompt[]): boolean {
   if (state.storage && !saveDeck(state.storage, next)) {
     showError(SAVE_FAIL);
@@ -74,7 +72,7 @@ function onCycle(id: string): void {
 }
 function onSurprise(): void {
   const picked = pickSurprise(state.prompts);
-  if (!picked) return; // button is disabled when the pool is dry; belt and braces
+  if (!picked) return;
   state.spotlightId = picked.id;
   renderSpotlight($("spotlight"), picked, { onDraw, onDismiss });
   $("spotlight").scrollIntoView({ behavior: "smooth", block: "center" });
@@ -111,7 +109,6 @@ function openWithSample(sample: string): void {
 function renderAll(): void {
   const { total, untried } = deckCounts(state.prompts);
   $("counts").textContent = `${total} prompt${total === 1 ? "" : "s"} · ${untried} untried`;
-  // Surprise Me: disabled (not hidden) with a reason when the untried pool is dry.
   const poolDry = untried === 0;
   ($("surprise-btn") as HTMLButtonElement).disabled = poolDry;
   const caption = $("surprise-caption");

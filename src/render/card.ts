@@ -3,7 +3,6 @@ import { escapeHtml } from "../promptStore.js";
 
 const STATUS_LABEL: Record<Status, string> = { untried: "Untried", in_progress: "In progress", done: "Done ✓" };
 
-// Inline SVGs, consistent stroke weight — no emoji, no icon lib.
 const STYLE_ICON: Record<Style, string> = {
   pencil: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5l.8-3.2 8-8 2.4 2.4-8 8-3.2.8z"/></svg>',
   ink: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5l4.5 4.5L6 13l-3.5 1L3.5 10z"/><path d="M9.5 3l3.5 3.5"/></svg>',
@@ -11,7 +10,6 @@ const STYLE_ICON: Record<Style, string> = {
   digital: '<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="3" width="12" height="8" rx="1"/><path d="M6 13.5h4"/></svg>',
 };
 
-// Deterministic jitter: same id → same tilt every render, so cards never twitch.
 // ponytail: hash is enough; swap for a seeded PRNG only if range matters.
 function jitterDeg(id: string): string {
   let h = 5381;
